@@ -3,7 +3,7 @@ import React from 'react'
 interface CardProps {
     posterUrl: string;
     title: string;
-    releaseYear: string;
+    releaseYear: number;
 }
 
 function Card({ posterUrl, title, releaseYear }: CardProps) {

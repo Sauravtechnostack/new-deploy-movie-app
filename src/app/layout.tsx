@@ -3,7 +3,7 @@ import './globals.css';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
-  weight: ['400', '500' ,'700'], 
+  weight: ['400', '500', '600' ,'700'], 
   variable: '--font-montserrat',
 });
 
@@ -12,7 +12,7 @@ export default function RootLayout({ children }: Readonly<{
 }>) {
   return (
     <html lang="en">
-      <body className={`${montserrat.variable} font-sans`}>
+      <body className={`${montserrat.variable} font-sans w-screen h-screen`}>
         {children}
       </body>
     </html>
