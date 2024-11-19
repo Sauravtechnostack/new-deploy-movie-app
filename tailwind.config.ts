@@ -9,6 +9,9 @@ export default {
 	],
 	theme: {
 		extend: {
+			backgroundImage: {
+				'bottom-pattern': "url('/assets/images/wave.png')",
+			},
 			fontFamily: {
 				sans: ['var(--font-montserrat)', 'Arial', 'Helvetica', 'sans-serif']
 			},

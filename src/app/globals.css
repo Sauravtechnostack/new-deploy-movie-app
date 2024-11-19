@@ -77,3 +77,7 @@ input::placeholder {
     @apply bg-background text-foreground;
   }
 }
+
+.container {
+  @apply max-w-[1280px] mx-auto px-[20px];
+}
