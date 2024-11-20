@@ -1,6 +1,8 @@
 import { handleError } from "@/lib/errorHandler";
 import { authGuard } from "@/lib/guards/auth.guard";
 import { addMovieSchema } from "@/lib/validations/movie/movie.validation";
+import { createNewMovie } from "@/services/movie.service";
+import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest){
@@ -10,16 +12,15 @@ export async function POST(request: NextRequest){
         // Update users
         const user = await authGuard(request)
 
-        console.log("User: ", user);
-
+        const userId = user._id as Types.ObjectId;
 
         // Parse the movie input json
-        // const {posterUrl, releaseYear, title} = addMovieSchema.parse(body);
+        const {posterUrl, releaseYear, title} = addMovieSchema.parse(body);
 
         // Add this data in db
-        
+        const newMovie = await createNewMovie({posterImage: posterUrl, title, releaseYear, userId})        
 
-        return NextResponse.json({'hello': "asda"}, {status: 200});
+        return NextResponse.json(newMovie, {status: 200});
     } catch (error) {
         console.log(error, "\n\n\n");
         return handleError(error)

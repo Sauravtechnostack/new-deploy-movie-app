@@ -5,7 +5,7 @@ export interface IMovie extends Document {
   posterImage: string;
   title: string;
   releaseYear: number;
-  created_by: typeof User;
+  userId: typeof User;
 }
 
 const movieSchema: Schema<IMovie> = new Schema(
@@ -24,7 +24,7 @@ const movieSchema: Schema<IMovie> = new Schema(
       type: Number,
       required: true,
     },
-    created_by: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,

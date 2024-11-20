@@ -1,5 +1,6 @@
 import { handleError } from '@/lib/errorHandler';
-import Movie from '../models/movie';
+import Movie, { IMovie } from '../models/movie';
+import { Types } from 'mongoose';
 
 /**
  * Create a new movie document.
@@ -10,7 +11,7 @@ export const createNewMovie = async (movieData: {
   posterImage: string;
   title: string;
   releaseYear: number;
-  created_by: string;
+  userId: Types.ObjectId;
 }) => {
   try {
     // Create a new movie
@@ -27,8 +28,8 @@ export const createNewMovie = async (movieData: {
  */
 export const getAllMovies = async () => {
   try {
-    const movies = await Movie.find().populate('created_by', 'name email'); // Populating creator details (adjust fields as necessary)
-    return { success: true, data: movies };
+    const movies = await Movie.find().lean();
+    return movies;
   } catch (error) {
     return handleError(error)
   }
