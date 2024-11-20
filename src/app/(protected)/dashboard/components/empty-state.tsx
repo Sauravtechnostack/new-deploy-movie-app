@@ -1,9 +1,12 @@
 "use client";
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../../../components/ui/button";
 import { redirect } from "next/navigation";
+import { useUserStore } from "@/store/user-store";
 
 function DashboardEmptyState() {
+  const {user} = useUserStore();
+  console.log(user);  
   return (
     <div>
       <div className="w-screen h-screen flex flex-col justify-center items-center">

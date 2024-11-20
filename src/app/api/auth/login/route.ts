@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import bcrypt from 'bcryptjs';
 import { loginSchema } from '@/lib/validations/auth/auth.validation';
@@ -8,7 +8,7 @@ import { generateToken } from '@/lib/utils/auth/jwt.utils';
 import { JWT_TYPE_ENUM } from '@/lib/constants/enums/common.enum';
 import { cookies, } from 'next/headers';
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   await dbConnect();
 
   try {
@@ -44,8 +44,9 @@ export async function POST(req: Request) {
     }
 
     // Generate a new access token and ref token
-    const accessToken = await generateToken({userId: userWithoutPassword._id as string}, JWT_TYPE_ENUM.ACCESS);
-    const refreshToken = rememberMe && await generateToken({userId: userWithoutPassword._id as string}, JWT_TYPE_ENUM.REFRESH)
+    const accessToken = generateToken({userId: userWithoutPassword._id.toString()}, JWT_TYPE_ENUM.ACCESS);
+    const refreshToken = rememberMe && generateToken({ userId: userWithoutPassword._id.toString() }, JWT_TYPE_ENUM.REFRESH)
+    
     
     // Successful login
     cookieStore.set('accessToken', accessToken);

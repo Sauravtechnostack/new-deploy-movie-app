@@ -1,6 +1,4 @@
 import { JWT_TYPE_ENUM } from '@/lib/constants/enums/common.enum';
-import CustomError from '@/lib/customError';
-import { handleError } from '@/lib/errorHandler';
 import jwt from 'jsonwebtoken';
 
 interface JwtPayload {
@@ -9,8 +7,8 @@ interface JwtPayload {
 
 
 // Secret keys from .env
-const ACCESS_SECRET_KEY = process.env.JWT_ACCESS_SECRET || 'default_secret_key';
-const REFRESH_SECRET_KEY = process.env.JWT_REFRESH_SECRET || 'default_refresh_secret';
+const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET || 'default_secret_key';
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'default_refresh_secret';
 const ACCESS_TOKEN_EXPIRATION = process.env.JWT_ACCESS_EXPIRATION || '1h'; // Example: 1h for 1 hour
 const REFRESH_TOKEN_EXPIRATION = process.env.JWT_REFRESH_EXPIRATION || '7d'; // Example: 7 days
 
@@ -24,7 +22,9 @@ const REFRESH_TOKEN_EXPIRATION = process.env.JWT_REFRESH_EXPIRATION || '7d'; // 
 export const generateToken = (payload: JwtPayload, type: JWT_TYPE_ENUM): string => {
   try {
     const expiry = type === JWT_TYPE_ENUM.ACCESS ? ACCESS_TOKEN_EXPIRATION : REFRESH_TOKEN_EXPIRATION;
-    const secret = type === JWT_TYPE_ENUM.ACCESS ? ACCESS_SECRET_KEY : REFRESH_SECRET_KEY;
+    const secret = type === JWT_TYPE_ENUM.ACCESS ? JWT_ACCESS_SECRET : JWT_REFRESH_SECRET;
+
+    console.log("Secret: ", {sec: secret})
   
     return jwt.sign(payload, secret, { expiresIn: expiry })
   } catch (error) {
@@ -40,10 +40,10 @@ export const generateToken = (payload: JwtPayload, type: JWT_TYPE_ENUM): string 
  */
 export const verifyToken = (token: string, type: JWT_TYPE_ENUM): JwtPayload => {
     try {
-      const secret = type === JWT_TYPE_ENUM.ACCESS ? ACCESS_SECRET_KEY : REFRESH_SECRET_KEY;
+      const secret = type === JWT_TYPE_ENUM.ACCESS ? JWT_ACCESS_SECRET : JWT_REFRESH_SECRET;
+      console.log("Secret: ", {sec: secret})
       return jwt.verify(token, secret) as JwtPayload;
     } catch (error) {
-      console.error('JWT verification failed:', error);
       throw new Error('Invalid or expired token');
     }
   };
