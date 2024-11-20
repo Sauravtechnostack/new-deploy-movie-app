@@ -1,13 +1,11 @@
 "use client";
 import React from "react";
 import { Button } from "../../../../components/ui/button";
-import { redirect } from "next/navigation";
-import { useUserStore } from "@/store/user-store";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function DashboardEmptyState() {
-  const { user } = useUserStore();
-  console.log(user);
+  const router = useRouter();
+
   return (
     <div>
       <div className="w-screen h-screen flex flex-col justify-center items-center">
@@ -15,11 +13,9 @@ function DashboardEmptyState() {
           Your movie list is empty
         </div>
         <div>
-          <Link href="movie/add">
-            <Button size="sm">
+            <Button size="sm" onClick={() => router.push('/movie/add')}>
               Add a new movie
             </Button>
-          </Link>
         </div>
       </div>
     </div>

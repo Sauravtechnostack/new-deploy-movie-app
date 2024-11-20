@@ -10,7 +10,7 @@ function Card({ posterUrl, title, releaseYear }: CardProps) {
   return (
     <div className="px-8 pt-8 pb-16 flex flex-col outline-none bg-card rounded-lg hover:cursor-pointer hover:bg-card-hover w-full">
       <img
-        src={posterUrl}
+        src={`https://next-project-image-upload-testing.s3.us-east-1.amazonaws.com/${posterUrl}`}
         className="w-full h-full min-h-[400px] object-cover rounded-lg"
         alt={title}
       />

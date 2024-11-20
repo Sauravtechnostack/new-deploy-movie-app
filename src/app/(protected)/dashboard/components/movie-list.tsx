@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useApi } from "@/hooks/useApi";
 import { toast } from "@/hooks/useToast";
+import DashboardEmptyState from "./empty-state";
 
 function MoviesList() {
   const [movies, setMovies] = useState<
@@ -47,7 +48,7 @@ function MoviesList() {
       toast({
         title: "Logged out successfully!"
       })
-    }else{
+    }else if(error){
       toast({
         title: error || "Something went wrong."
       })
@@ -74,6 +75,12 @@ function MoviesList() {
 
     fetchMovies(); // Fetch data whenever currentPage or pageSize changes
   }, [currentPage, pageSize]);
+
+  if(movies.length === 0 && !loading){
+    return <DashboardEmptyState />
+  }
+
+  console.log("Movie list: ", movies);
 
   return (
     <div>
@@ -109,9 +116,9 @@ function MoviesList() {
               <div>Loading...</div> // Show loading text while fetching
             ) : (
               movies.length > 0 &&
-              movies.map(({ posterImage, title, releaseYear }) => (
+              movies.map(({ posterImage, title, releaseYear }, index) => (
                 <Card
-                  key={posterImage}
+                  key={index}
                   posterUrl={posterImage}
                   title={title}
                   releaseYear={releaseYear}

@@ -1,5 +1,5 @@
 import React from "react";
-import MoviesList from '../components/movie-list'
+import MoviesList from '../../dashboard/components/movie-list'
 function MovieList() {
   return (
     <MoviesList />

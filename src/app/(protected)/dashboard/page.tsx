@@ -1,10 +1,10 @@
-import DashboardEmptyState from "./components/empty-state";
+import MovieList from "../movie/list/page";
 import React from "react";
 
 function Dashboard() {
   return (
     <div>
-      <DashboardEmptyState />
+      <MovieList />
     </div>
   );
 }

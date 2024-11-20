@@ -1,7 +1,7 @@
 import React from "react";
 
 function EditMovie() {
-  return <div>EditMovie</div>;
+  return <>Edit movies</>;
 }
 
 export default EditMovie;

@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
      try {
           // Step 1: Authenticate the user
-          const user = await authGuard(request);
+          const user = await authGuard();
 
           // Step 2: Extract pagination parameters from the request query
           const url = new URL(request.url);

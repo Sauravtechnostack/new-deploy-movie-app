@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import ImageUpload from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
@@ -30,34 +29,50 @@ function AddMovie() {
   const router = useRouter();
 
   const onSubmit = async (data: FormData) => {
-    console.log(data);
-    const response = await fetch("/api/s3/presigned-url", {
+    // Request presigned URL
+    const presignedUrlRawData = await fetch("/api/s3/presigned-url", {
       method: "POST",
       body: JSON.stringify({
         objectKey: data.image?.name,
         operation: "PUT",
-        expiresIn: 60,
+        expiresIn: 3600,
       }),
     });
-    const { data: url } = await response.json();
-
-    fetch(url, {
+    const { data: presignedUrl } = await presignedUrlRawData.json();
+  
+    // Upload the image to S3
+    const uploadedImage = await fetch(presignedUrl, {
       method: "PUT",
+      headers: {
+        "Content-Type": data.image.type, 
+      },
       body: data.image,
     });
-
+  
+    if (!uploadedImage.ok) {
+      console.error("Image upload failed", uploadedImage);
+      return;
+    }
+  
+    console.log("Uploaded image: ", uploadedImage);
+  
+    // Add movie information
     const movieResponse = await fetch("/api/movies/add", {
       method: "POST",
       body: JSON.stringify({
-        posterImage: url,
+        posterImage: data.image?.name,
         releaseYear: parseInt(data.year, 10),
         title: data.title,
       }),
     });
+  
     if (movieResponse.ok) {
       router.push("/movie/list");
+    } else {
+      console.error("Failed to add movie");
     }
   };
+  
 
   const handleCancel = () => router.push("/dashboard");
 
