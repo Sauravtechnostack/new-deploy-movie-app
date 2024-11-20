@@ -31,22 +31,10 @@ export const createNewMovie = async (movieData: {
  */
 export const getMovieFromId = async (movieId: string, userId: Types.ObjectId) => {
   try {
-    // Find the movie by its ID
     const movie = await Movie.findOne({
-      
+      _id: movieId,
+      userId
     });
-
-    // If the movie doesn't exist, throw an error
-    if (!movie) {
-      throw new CustomError('Movie not found.', 404)
-    }
-
-    // Check if the movie belongs to the given user
-    if (movie.userId.toString() !== userId.toString()) {
-      throw new CustomError('Unauthorized access to this movie.', 400)
-    }
-
-    // Return the movie if it belongs to the user
     return movie;
   } catch (error) {
     return handleError(error);
@@ -67,8 +55,8 @@ export const getAllMovies = async (userId: Types.ObjectId, pagination: Paginatio
     const movies = await Movie.find({
       userId,
     })
-      .skip(skip)  // Skip the number of records
-      .limit(limit) // Limit the number of records
+      .skip(skip)
+      .limit(limit)
       .lean();
 
     // Get the total count for pagination
@@ -84,7 +72,7 @@ export const getAllMovies = async (userId: Types.ObjectId, pagination: Paginatio
       },
     };
   } catch (error) {
-    return handleError(error); // Handle error appropriately
+    return handleError(error);
   }
 };
 /**
@@ -100,10 +88,7 @@ export const updateMovieFromId = async (id: string, updateData: Partial<{
   created_by: string;
 }>) => {
   try {
-    const updatedMovie = await Movie.findByIdAndUpdate(id, updateData, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedMovie = await Movie.findByIdAndUpdate(id, updateData);
 
     if (!updatedMovie) {
       throw new CustomError('Movie not found', 404);

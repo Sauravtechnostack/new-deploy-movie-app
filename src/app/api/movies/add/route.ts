@@ -14,12 +14,11 @@ export async function POST(request: NextRequest){
 
         const userId = user._id as Types.ObjectId;
 
-
         // Parse the movie input json
-        const {posterUrl, releaseYear, title} = addMovieSchema.parse(body);
+        const {posterImage, releaseYear, title} = addMovieSchema.parse(body);
 
         // Add this data in db
-        const newMovie = await createNewMovie({posterImage: posterUrl, title, releaseYear, userId})        
+        const newMovie = await createNewMovie({posterImage: posterImage, title, releaseYear, userId})        
 
         return NextResponse.json(
             { success: true, message: 'New movie successfully added.', data: newMovie },
