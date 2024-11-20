@@ -1,12 +1,12 @@
-import DashboardEmptyState from './components/empty-state'
-import React from 'react'
+import DashboardEmptyState from "./components/empty-state";
+import React from "react";
 
 function Dashboard() {
-    return (
-        <div>
-            <DashboardEmptyState />
-        </div>
-    )
+  return (
+    <div>
+      <DashboardEmptyState />
+    </div>
+  );
 }
 
-export default Dashboard
+export default Dashboard;

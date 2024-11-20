@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function EditMovie() {
-  return (
-    <div>EditMovie</div>
-  )
+  return <div>EditMovie</div>;
 }
 
-export default EditMovie
+export default EditMovie;

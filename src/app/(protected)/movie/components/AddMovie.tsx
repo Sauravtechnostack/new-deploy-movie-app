@@ -30,8 +30,8 @@ function AddMovie() {
         operation: "PUT",
         expiresIn: 60,
       }),
-    }); 
-    const { url } = await response.json();
+    });
+    const { data: url } = await response.json();
 
     fetch(url, {
       method: "PUT",
@@ -46,11 +46,13 @@ function AddMovie() {
         title: data.title,
       }),
     });
-
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="container py-10 lg:py-20">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="container py-10 lg:py-20"
+    >
       <div className="text-primary-foreground font-semibold text-[32px] lg:text-[48px] mb-5 lg:mb-20">
         Create a new movie
       </div>
@@ -95,7 +97,12 @@ function AddMovie() {
             />
           </div>
           <div className="flex gap-[16px]">
-            <Button variant="secondary" size="sm" className="w-1/2" type="button">
+            <Button
+              variant="secondary"
+              size="sm"
+              className="w-1/2"
+              type="button"
+            >
               Cancel
             </Button>
             <Button variant="default" size="sm" className="w-1/2" type="submit">
