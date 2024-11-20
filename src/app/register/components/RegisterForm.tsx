@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { registerSchema, RegisterSchema } from '@/lib/validations/auth/auth.validation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/hooks/useToast';
 import { useRouter } from 'next/navigation';
 
 const RegisterForm = () => {

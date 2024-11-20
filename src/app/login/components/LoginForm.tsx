@@ -3,18 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "@/hooks/use-toast";
+import { useApi } from "@/hooks/useApi";
+import { toast } from "@/hooks/useToast";
+import { loginSchema } from "@/lib/validations/auth/auth.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { json } from "stream/consumers";
 import { z } from "zod";
-
-const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  rememberMe: z.boolean().default(false),
-});
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -31,29 +27,38 @@ export function LoginForm() {
       email: "",
       password: "",
       rememberMe: false,
-    }
+    },
+    mode: 'onBlur'
   });
+  const router = useRouter();
+  const {isLoading, error, data, callApi} = useApi();
 
-  const onSubmit = async (data: LoginFormData) => {
-    // Handle login logic here
-    console.log(data);  
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify(data),
-        }); 
+  useEffect(() => {
+    if (data) {
+      // Set success toast notification
+      toast({ title: "Login successful!" });
+      // Redirect after the login is successful
+      router.replace('/dashboard'); 
+    } else if (error) {
+      // If there's an error, show the error message
+      toast({ title: error });
+    }
+  },[data, error, router])
 
-    if(response.ok) {
-      const data = await response.json();
-      localStorage.setItem('userresponse',JSON.stringify(data))
-      redirect("/dashboard");
-    } else {
-      toast({
-        title: "Something went wrong",
+  const onSubmit = async (loginFormData: LoginFormData) => {
+    try {
+      // Make the API call to login
+      await callApi({
+        url: "/api/auth/login",
+        method: 'POST',
+        body: loginFormData,
       });
+    } catch (error: unknown) {
+      // Handle any errors during the login request
+      toast({ title: "An error occurred. Please try again." });
     }
   };
 
-  console.log(errors);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-[300px] flex flex-col justify-center items-center">
@@ -66,6 +71,7 @@ export function LoginForm() {
           className="w-full"
           placeholder="Email"
           type="email"
+          isInputvalid={errors.email ? false : true}
           {...register("email")}
         />
         <div className="h-4">
@@ -82,6 +88,7 @@ export function LoginForm() {
           placeholder="Password"
           type="password"
           className="w-full"
+          isInputvalid={errors.password ? false : true}
           {...register("password")}
         />
         <div className="h-4">
@@ -110,7 +117,7 @@ export function LoginForm() {
       </div>
 
       <div>
-        <Button type="submit">Login</Button>
+        <Button type="submit" disabled={isLoading}>Login</Button>
       </div>
     </form>
   );

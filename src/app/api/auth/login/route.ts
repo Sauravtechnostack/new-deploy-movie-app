@@ -36,7 +36,6 @@ export async function POST(req: NextRequest) {
       )
     }
 
-
     // Generate access and refresh token based on remember me
     if (rememberMe) {
       // Update remember me
@@ -47,9 +46,9 @@ export async function POST(req: NextRequest) {
     const accessToken = generateToken({userId: userWithoutPassword._id.toString()}, JWT_TYPE_ENUM.ACCESS);
     const refreshToken = rememberMe && generateToken({ userId: userWithoutPassword._id.toString() }, JWT_TYPE_ENUM.REFRESH)
     
-    
     // Successful login
     cookieStore.set('accessToken', accessToken);
+
     if(refreshToken){
       cookieStore.set('refreshToken', refreshToken);
     }
