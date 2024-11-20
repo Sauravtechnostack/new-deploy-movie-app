@@ -1,36 +1,15 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI as string;
+// MongoDB URI
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/your_database_name';
 
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
-}
-
-// Global variable to hold the connection status in serverless environments
-let cached = global.mongoose;
-
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
-
-/**
- * Connect to MongoDB.
- */
-async function dbConnect() {
-  if (cached.conn) {
-    // If already connected, return the cached connection.
-    return cached.conn;
+// Connect to MongoDB
+export default async function connectDB(): Promise<void>{
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log('Connected to MongoDB');
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+    process.exit(1); // Exit process with failure
   }
-
-  if (!cached.promise) {
-    // If no existing connection, create a new promise and connect to MongoDB.
-    cached.promise = mongoose.connect(MONGODB_URI).then((mongooseInstance) => {
-      return mongooseInstance;
-    });
-  }
-
-  cached.conn = await cached.promise;
-  return cached.conn;
-}
-
-export default dbConnect;
+};

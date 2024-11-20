@@ -1,7 +1,7 @@
-import { NextApiRequest } from 'next';
+import { IUser } from '@/models/user';
 
 declare module 'next' {
   interface NextApiRequest {
-    user?: { userId: string }; 
+    user?: IUser; 
   }
 }

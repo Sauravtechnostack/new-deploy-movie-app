@@ -1,9 +1,10 @@
 import { JWT_TYPE_ENUM } from '@/lib/constants/enums/common.enum';
+import CustomError from '@/lib/customError';
+import { handleError } from '@/lib/errorHandler';
 import jwt from 'jsonwebtoken';
 
 interface JwtPayload {
   userId: string;
-  [key: string]: any;
 }
 
 
@@ -21,10 +22,14 @@ const REFRESH_TOKEN_EXPIRATION = process.env.JWT_REFRESH_EXPIRATION || '7d'; // 
  * @returns The signed JWT token as a string.
  */
 export const generateToken = (payload: JwtPayload, type: JWT_TYPE_ENUM): string => {
+  try {
     const expiry = type === JWT_TYPE_ENUM.ACCESS ? ACCESS_TOKEN_EXPIRATION : REFRESH_TOKEN_EXPIRATION;
     const secret = type === JWT_TYPE_ENUM.ACCESS ? ACCESS_SECRET_KEY : REFRESH_SECRET_KEY;
   
-    return jwt.sign(payload, secret, { expiresIn: expiry });
+    return jwt.sign(payload, secret, { expiresIn: expiry })
+  } catch (error) {
+    throw new Error("Error processing ")
+  }
   };
 
 /**

@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import bcrypt from 'bcryptjs';
-import { loginSchema } from '@/lib/validations/auth/auth-validation';
+import { loginSchema } from '@/lib/validations/auth/auth.validation';
 import { handleError } from '@/lib/errorHandler';
-import { getUserByEmail, updateUser } from '@/services/userService';
+import { getUserByEmail, updateUser } from '@/services/user.service';
 import { generateToken } from '@/lib/utils/auth/jwt.utils';
 import { JWT_TYPE_ENUM } from '@/lib/constants/enums/common.enum';
 
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const user = await getUserByEmail(email);
 
     if (!user) {
-      return NextResponse.json({ message: 'User not found' }, { status: 404 });
+      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 });
     }
 
     const { password: userPassword, ...userWithoutPassword } = user;
@@ -28,8 +28,8 @@ export async function POST(req: Request) {
     const isMatch = await bcrypt.compare(password, userPassword);
 
     if (!isMatch) {
-      return new Response(
-        JSON.stringify({ success: false, message: 'Invalid credentials' }),
+      return NextResponse.json(
+        { success: false, message: 'Invalid credentials' },
         { status: 400 }
       )
     }
@@ -43,12 +43,13 @@ export async function POST(req: Request) {
     }
 
     // Generate a new access token and ref token
-    const accessToken = generateToken({userId: userWithoutPassword._id as string}, JWT_TYPE_ENUM.ACCESS);
-    const refreshToken = rememberMe && generateToken({userId: userWithoutPassword._id as string}, JWT_TYPE_ENUM.REFRESH)
+    const accessToken = await generateToken({userId: userWithoutPassword._id as string}, JWT_TYPE_ENUM.ACCESS);
+    const refreshToken = rememberMe && await generateToken({userId: userWithoutPassword._id as string}, JWT_TYPE_ENUM.REFRESH)
     
+    console.log("tok",accessToken);
     // Successful login
-    return new Response(
-      JSON.stringify({ success: true, message: 'Login successful', data: {user: userWithoutPassword, accessToken, refreshToken} }),
+    return NextResponse.json(
+      { success: true, message: 'Login successful', data: {user: userWithoutPassword, accessToken, refreshToken} },
       { status: 200 }
     );
   } catch (error) {

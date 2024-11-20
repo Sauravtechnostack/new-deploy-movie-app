@@ -1,8 +1,9 @@
 // lib/errorHandler.ts
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
+import CustomError from './customError';
 
-export function handleError(error: any) {
+export function handleError(error: unknown) {
   if (error instanceof ZodError) {
     // Zod validation errors
     const formattedErrors = error.errors.map(err => ({
@@ -10,6 +11,7 @@ export function handleError(error: any) {
       message: err.message,
     }));
 
+    console.log("\n\n\n\nFormatted error: ", formattedErrors);
     return NextResponse.json({
       success: false,
       message: 'Validation Error',
@@ -19,14 +21,22 @@ export function handleError(error: any) {
     );
   } else if (error instanceof Error) {
     // General errors
-    console.log("INSIDE \n\n\n\n\n\n\n\n")
     return NextResponse.json({
       success: false,
       message: error.message || "Internal server error",
     },
       { status: 500 }
     );
-  } else {
+  } else if(error instanceof CustomError){
+    // Custom errors
+    return NextResponse.json({
+      success: false,
+      message: error.statusCode >= 500 ? "Intenal server error." : error.message,
+    },{
+      status: error.statusCode
+    })
+  }
+  else {
     // Unexpected error type
     return NextResponse.json({
       success: false,
