@@ -7,6 +7,7 @@ import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { json } from "stream/consumers";
 import { z } from "zod";
 
 const loginSchema = z.object({
@@ -42,6 +43,8 @@ export function LoginForm() {
         }); 
 
     if(response.ok) {
+      const data = await response.json();
+      localStorage.setItem('userresponse',JSON.stringify(data))
       redirect("/dashboard");
     } else {
       toast({

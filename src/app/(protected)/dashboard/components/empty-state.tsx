@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "../../../../components/ui/button";
 import { redirect } from "next/navigation";
 import { useUserStore } from "@/store/user-store";
+import Link from "next/link";
 
 function DashboardEmptyState() {
   const { user } = useUserStore();
@@ -14,9 +15,11 @@ function DashboardEmptyState() {
           Your movie list is empty
         </div>
         <div>
-          <Button size="sm" onClick={() => redirect("/movie/add")}>
-            Add a new movie
-          </Button>
+          <Link href="movie/add">
+            <Button size="sm">
+              Add a new movie
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
