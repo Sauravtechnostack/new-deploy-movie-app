@@ -18,6 +18,7 @@ import DashboardEmptyState from "./empty-state";
 function MoviesList() {
   const [movies, setMovies] = useState<
     {
+      _id: string,
       posterImage: string;
       title: string;
       releaseYear: number;
@@ -116,9 +117,10 @@ function MoviesList() {
               <div>Loading...</div> // Show loading text while fetching
             ) : (
               movies.length > 0 &&
-              movies.map(({ posterImage, title, releaseYear }, index) => (
+              movies.map(({_id ,posterImage, title, releaseYear }) => (
                 <Card
-                  key={index}
+                  key={_id}
+                  id={_id}
                   posterUrl={posterImage}
                   title={title}
                   releaseYear={releaseYear}

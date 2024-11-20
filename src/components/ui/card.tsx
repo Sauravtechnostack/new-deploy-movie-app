@@ -1,14 +1,21 @@
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface CardProps {
+  id: string,
   posterUrl: string;
   title: string;
   releaseYear: number;
 }
 
-function Card({ posterUrl, title, releaseYear }: CardProps) {
+function Card({id, posterUrl, title, releaseYear }: CardProps) {
+  const router = useRouter()
+  const handleCardClick = () => {
+    router.push(`movie/${id}`)
+  }
+
   return (
-    <div className="px-8 pt-8 pb-16 flex flex-col outline-none bg-card rounded-lg hover:cursor-pointer hover:bg-card-hover w-full">
+    <div className="px-8 pt-8 pb-16 flex flex-col outline-none bg-card rounded-lg hover:cursor-pointer hover:bg-card-hover w-full" onClick={()=>handleCardClick()}>
       <img
         src={`https://next-project-image-upload-testing.s3.us-east-1.amazonaws.com/${posterUrl}`}
         className="w-full h-full min-h-[400px] object-cover rounded-lg"
