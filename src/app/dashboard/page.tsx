@@ -1,4 +1,4 @@
-import DashboardEmptyState from '@/components/dashboard/empty-state'
+import DashboardEmptyState from './components/empty-state'
 import React from 'react'
 
 function Dashboard() {

@@ -10,9 +10,11 @@ export async function POST(request: NextRequest){
         const body = await request.json();
 
         // Update users
-        const user = await authGuard(request)
+        const user = await authGuard(request);
 
         const userId = user._id as Types.ObjectId;
+
+        // const userId = '673c70ea6050bc0972cd22a7';
 
         // Parse the movie input json
         const {posterUrl, releaseYear, title} = addMovieSchema.parse(body);
@@ -22,7 +24,6 @@ export async function POST(request: NextRequest){
 
         return NextResponse.json(newMovie, {status: 200});
     } catch (error) {
-        console.log(error, "\n\n\n");
         return handleError(error)
     }
 }

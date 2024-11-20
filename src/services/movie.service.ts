@@ -26,9 +26,13 @@ export const createNewMovie = async (movieData: {
  * Retrieve all movies from the database.
  * @returns Array of movie documents or an error
  */
-export const getAllMovies = async () => {
+export const getAllMovies = async (userId: Types.ObjectId) => {
   try {
-    const movies = await Movie.find().lean();
+    const movies = await Movie.find({
+      where: {
+        userId,
+      }
+    }).lean();
     return movies;
   } catch (error) {
     return handleError(error)

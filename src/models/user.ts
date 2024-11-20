@@ -1,7 +1,7 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
 // Step 1: Define the TypeScript interface for the User document
-export interface IUser extends Document {
+export interface IUser extends Document<mongoose.Types.ObjectId> {
   email: string;
   password: string;
   rememberMe: boolean;
