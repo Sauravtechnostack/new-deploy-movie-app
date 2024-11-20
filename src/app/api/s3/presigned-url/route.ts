@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     const { objectKey, operation, expiresIn } = validatedBody;
 
     // Generate the pre-signed URL using the utility function
-    const url = await generatePresignedUrl(process.env.AWS_S3_BUCKET_NAME as string, `${user._id}/${objectKey}`, operation, expiresIn);
+    const url = await generatePresignedUrl(process.env.AWS_S3_BUCKET_NAME as string, objectKey, operation, expiresIn);
 
     // Return the generated URL
     return NextResponse.json({ url });
