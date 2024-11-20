@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/pagination";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useApi } from "@/hooks/useApi";
+import { toast } from "@/hooks/useToast";
 
 function MoviesList() {
   const [movies, setMovies] = useState<
@@ -25,11 +27,33 @@ function MoviesList() {
   const [pageSize] = useState(12);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { data, error, callApi } = useApi()
 
   // Function to handle click on the "Add" button
   const handleAddClick = () => {
     router.push("/movie/add"); // Redirect user to the "movie/add" page
   };
+
+  const handleLogout = async () => {
+    await callApi({
+      url: '/api/auth/logout',
+      method: "POST",
+    })
+  }
+
+  useEffect(() => {
+    if(data){
+      router.replace('/login');
+      toast({
+        title: "Logged out successfully!"
+      })
+    }else{
+      toast({
+        title: error || "Something went wrong."
+      })
+    }
+  }, [data, error, router])
+
   useEffect(() => {
     const fetchMovies = async () => {
       setLoading(true); // Start loading
@@ -69,7 +93,7 @@ function MoviesList() {
                 ></Image>
               </div>
             </div>
-            <div className="font-bold flex text-[16px] hover:cursor-pointer justify-end">
+            <div onClick={() => handleLogout()} className="font-bold flex text-[16px] hover:cursor-pointer justify-end">
               <span className="mr-[16px]  sm:flex inline-block">Logout</span>
               <Image
                 src="/assets/images/logout.svg"

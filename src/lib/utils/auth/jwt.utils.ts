@@ -23,12 +23,10 @@ export const generateToken = (payload: JwtPayload, type: JWT_TYPE_ENUM): string 
   try {
     const expiry = type === JWT_TYPE_ENUM.ACCESS ? ACCESS_TOKEN_EXPIRATION : REFRESH_TOKEN_EXPIRATION;
     const secret = type === JWT_TYPE_ENUM.ACCESS ? JWT_ACCESS_SECRET : JWT_REFRESH_SECRET;
-
-    console.log("Secret: ", {sec: secret})
   
     return jwt.sign(payload, secret, { expiresIn: expiry })
   } catch (error) {
-    throw new Error("Error processing ")
+    throw new Error("Error generating JWT token.")
   }
   };
 
@@ -41,7 +39,6 @@ export const generateToken = (payload: JwtPayload, type: JWT_TYPE_ENUM): string 
 export const verifyToken = (token: string, type: JWT_TYPE_ENUM): JwtPayload => {
     try {
       const secret = type === JWT_TYPE_ENUM.ACCESS ? JWT_ACCESS_SECRET : JWT_REFRESH_SECRET;
-      console.log("Secret: ", {sec: secret})
       return jwt.verify(token, secret) as JwtPayload;
     } catch (error) {
       throw new Error('Invalid or expired token');

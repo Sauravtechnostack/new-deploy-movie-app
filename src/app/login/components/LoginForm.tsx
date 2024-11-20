@@ -104,9 +104,7 @@ export function LoginForm() {
         <Checkbox
           id="rememberMeCheckbox"
           className="h-[17px] w-[18px] mr-8 bg-input outline-none border-none"
-          onChange={() => {
-            setValue("rememberMe", !getValues("rememberMe"));
-          }}
+          onClick={() => setValue("rememberMe", !getValues("rememberMe"))}
         />
         <Label
           htmlFor="rememberMeCheckbox"

@@ -6,7 +6,7 @@ import { handleError } from '@/lib/errorHandler';
 import { getUserByEmail } from '@/services/user.service';
 import { generateToken } from '@/lib/utils/auth/jwt.utils';
 import { JWT_TYPE_ENUM } from '@/lib/constants/enums/common.enum';
-import { cookies, } from 'next/headers';
+import { cookies } from 'next/headers';
 
 export async function POST(req: NextRequest) {
   await dbConnect();
