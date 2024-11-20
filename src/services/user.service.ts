@@ -52,3 +52,18 @@ export const updateUser = async (
       throw new Error('Unable to update user. Please try again later.');
     }
   };
+
+/**
+ * Create a new user.
+ * @param user - The user object to create.
+ * @returns The created user document.
+ */
+export const createUser = async (user: IUser): Promise<IUser> => {
+  try {
+    const newUser = await User.create(user);
+    return newUser;
+  } catch (error) {
+    console.error('Error creating user:', error);
+    throw new Error('Unable to create user. Please try again later.');
+  }
+}

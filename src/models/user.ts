@@ -4,7 +4,6 @@ import mongoose, { Document, Model, Schema } from 'mongoose';
 export interface IUser extends Document {
   email: string;
   password: string;
-  rememberMe: boolean;
 }
 
 // Step 2: Define the Mongoose Schema
@@ -20,10 +19,7 @@ const userSchema: Schema<IUser> = new Schema(
       type: String,
       required: true,
     },
-    rememberMe: {
-      type: Boolean,
-      default: false,
-    },
+   
   },
   {
     timestamps: true,

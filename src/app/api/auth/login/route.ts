@@ -3,9 +3,10 @@ import dbConnect from '@/lib/dbConnect';
 import bcrypt from 'bcryptjs';
 import { loginSchema } from '@/lib/validations/auth/auth.validation';
 import { handleError } from '@/lib/errorHandler';
-import { getUserByEmail, updateUser } from '@/services/user.service';
+import { getUserByEmail } from '@/services/user.service';
 import { generateToken } from '@/lib/utils/auth/jwt.utils';
 import { JWT_TYPE_ENUM } from '@/lib/constants/enums/common.enum';
+import { cookies, } from 'next/headers';
 
 export async function POST(req: Request) {
   await dbConnect();
@@ -26,28 +27,31 @@ export async function POST(req: Request) {
 
     // Compare passwords
     const isMatch = await bcrypt.compare(password, userPassword);
+    const cookieStore = await cookies();
 
     if (!isMatch) {
       return NextResponse.json(
         { success: false, message: 'Invalid credentials' },
-        { status: 400 }
+        { status: 400 },
       )
     }
 
+
     // Generate access and refresh token based on remember me
-    if (rememberMe && rememberMe !== userWithoutPassword.rememberMe) {
+    if (rememberMe) {
       // Update remember me
-      await updateUser(email, {
-        rememberMe
-      })
+      cookieStore.set('rememberMe', 'true');      
     }
 
     // Generate a new access token and ref token
     const accessToken = await generateToken({userId: userWithoutPassword._id as string}, JWT_TYPE_ENUM.ACCESS);
     const refreshToken = rememberMe && await generateToken({userId: userWithoutPassword._id as string}, JWT_TYPE_ENUM.REFRESH)
     
-    console.log("tok",accessToken);
     // Successful login
+    cookieStore.set('accessToken', accessToken);
+    if(refreshToken){
+      cookieStore.set('refreshToken', refreshToken);
+    }
     return NextResponse.json(
       { success: true, message: 'Login successful', data: {user: userWithoutPassword, accessToken, refreshToken} },
       { status: 200 }
