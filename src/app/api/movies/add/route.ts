@@ -22,7 +22,10 @@ export async function POST(request: NextRequest){
         // Add this data in db
         const newMovie = await createNewMovie({posterImage: posterUrl, title, releaseYear, userId})        
 
-        return NextResponse.json(newMovie, {status: 200});
+        return NextResponse.json(
+            { success: true, message: 'New movie successfully added.', data: newMovie },
+            { status: 200 }
+          );
     } catch (error) {
         return handleError(error)
     }
