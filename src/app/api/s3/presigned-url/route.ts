@@ -19,7 +19,10 @@ export async function POST(request: NextRequest) {
     const url = await generatePresignedUrl(process.env.AWS_S3_BUCKET_NAME as string, objectKey, operation, expiresIn);
 
     // Return the generated URL
-    return NextResponse.json({ url });
+    return NextResponse.json(
+      { success: true, message: 'Pre-signed url successfully generated.', data: url },
+      { status: 200 }
+    );
   } catch (error) {
     return handleError(error)
   }
