@@ -9,7 +9,10 @@ type SearchParams = {
   limit?: string;
 };
 
-async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
+export const dynamic = 'force-dynamic'
+
+
+async function Dashboard({ searchParams }: { searchParams: Promise<SearchParams> }) {
   // Get params
   const page = parseInt((await searchParams).page as string) || 1;
   const limit = parseInt((await searchParams).limit as string) || 8;
