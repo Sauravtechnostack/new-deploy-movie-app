@@ -33,7 +33,8 @@ export const getMovieFromId = async (movieId: string, userId: Types.ObjectId) =>
   try {
     const movie = await Movie.findOne({
       _id: movieId,
-      userId
+      userId,
+      isDeleted: false
     });
 
     return movie;
@@ -55,6 +56,7 @@ export const getAllMovies = async (userId: Types.ObjectId, pagination: Paginatio
     // Query the database with pagination
     const movies = await Movie.find({
       userId,
+      isDeleted: false
     })
       .skip(skip)
       .limit(limit)
@@ -98,5 +100,29 @@ export const updateMovieFromId = async (id: string, updateData: Partial<{
     return updatedMovie;
   } catch (error) {
     return handleError(error)
+  }
+};
+
+/**
+ * Soft delete a movie document.
+ * @param movieId ID of the movie to be soft-deleted
+ * @returns Updated movie document or an error
+ */
+export const softDeleteMovie = async (movieId: string) => {
+  try {
+    // Find and update the movie with a `deleted` flag
+    const updatedMovie = await Movie.findByIdAndUpdate(
+      movieId,
+      { isDeleted: true },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedMovie) {
+      throw new Error('Movie not found');
+    }
+
+    return updatedMovie;
+  } catch (error) {
+    return handleError(error);
   }
 };

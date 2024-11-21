@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from 'next/image';
+import Image from "next/image";
 
 interface ImageUploadProps {
   onChange: (file: File | null) => void;
@@ -9,8 +9,6 @@ interface ImageUploadProps {
 
 function ImageUpload({ onChange, value }: ImageUploadProps) {
   const [dragActive, setDragActive] = useState(false);
-  
-  
 
   const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
