@@ -12,7 +12,7 @@ type SearchParams = {
 async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
   // Get params
   const page = parseInt((await searchParams).page as string) || 1;
-  const limit = parseInt((await searchParams).limit as string) || 1;
+  const limit = parseInt((await searchParams).limit as string) || 8;
 
   // Get movie data
   const moviesData = await getAllMoviesApi(page, limit);
