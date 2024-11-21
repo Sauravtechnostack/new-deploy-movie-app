@@ -31,7 +31,6 @@ function MovieForm({ movie }: { movie?: IMovie }) {
 
   const onSubmit = async (data: FormData) => {
     // Request presigned URL
-    
     let url = data.image as string;
     if(data.image instanceof File) {
       url = (Date.now() + "-" + data.image?.name);
@@ -58,9 +57,8 @@ function MovieForm({ movie }: { movie?: IMovie }) {
 
     }
 
-    console.log("url", url);
-    // Add movie information
 
+    // Add movie information
     if (movie) {
       await fetch(`/api/movies/${movie._id}`, {
         method: "PUT",
@@ -73,7 +71,7 @@ function MovieForm({ movie }: { movie?: IMovie }) {
       toast({
         title: "Movie updated successfully",
       });
-      router.push("/movie/list");
+      router.push("/dashboard");
     } else {
       const movieResponse = await fetch("/api/movies/add", {
         method: "POST",
@@ -85,7 +83,7 @@ function MovieForm({ movie }: { movie?: IMovie }) {
       });
     
       if (movieResponse.ok) {
-        router.push("/movie/list");
+        router.push("/dashboard");
       } else {
         console.error("Failed to add movie");
       }

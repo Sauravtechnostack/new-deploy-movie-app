@@ -41,13 +41,11 @@ function Card({
           />
         </svg>
       </button>
-      <div
-        className="px-8 pt-8 pb-16 flex flex-col outline-none bg-card rounded-lg hover:cursor-pointer hover:bg-card-hover w-full"
-      >
+      <div className="px-8 pt-8 pb-16 flex flex-col outline-none bg-card rounded-lg hover:cursor-pointer hover:bg-card-hover w-full">
         <Image
           width={500}
           height={500}
-          src={`https://next-project-image-upload-testing.s3.us-east-1.amazonaws.com/${posterUrl}`}
+          src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}/${posterUrl}`}
           className="w-full h-full min-h-[400px] object-cover rounded-lg"
           alt={title}
         />

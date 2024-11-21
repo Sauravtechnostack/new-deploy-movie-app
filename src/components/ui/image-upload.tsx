@@ -52,7 +52,7 @@ function ImageUpload({ onChange, value, image }: ImageUploadProps) {
     if (image) {
       return (
         <Image
-          src={'https://next-project-image-upload-testing.s3.us-east-1.amazonaws.com/' +image}
+          src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}/${image}`}
           alt="Existing"
           className="w-full h-full object-cover"
           width={500}

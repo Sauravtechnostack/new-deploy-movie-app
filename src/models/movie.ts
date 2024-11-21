@@ -19,7 +19,6 @@ const movieSchema: Schema<IMovie> = new Schema(
       type: String,
       required: true,
       unique: false,
-      lowercase: true,
     },
     releaseYear: {
       type: Number,

@@ -58,7 +58,7 @@ export const getAllMovies = async (userId: Types.ObjectId, pagination: Paginatio
       .lean();
 
     // Get the total count for pagination
-    const totalMovies = await Movie.countDocuments({ userId });
+    const totalMovies = await Movie.countDocuments({ userId, isDeleted: false });
 
     return {
       movies,
