@@ -26,7 +26,7 @@ function MoviesList() {
   >([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [pageSize] = useState(12);
+  const [pageSize] = useState(8);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { data, error, callApi } = useApi()
@@ -81,7 +81,6 @@ function MoviesList() {
     return <DashboardEmptyState />
   }
 
-  console.log("Movie list: ", movies);
 
   return (
     <div>

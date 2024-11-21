@@ -35,6 +35,7 @@ export const getMovieFromId = async (movieId: string, userId: Types.ObjectId) =>
       _id: movieId,
       userId
     });
+
     return movie;
   } catch (error) {
     return handleError(error);

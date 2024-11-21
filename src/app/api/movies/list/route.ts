@@ -11,8 +11,8 @@ export async function GET(request: NextRequest) {
 
           // Step 2: Extract pagination parameters from the request query
           const url = new URL(request.url);
-          const page = parseInt(url.searchParams.get('page') || '1', 10); 1
-          const limit = parseInt(url.searchParams.get('limit') || '10', 10);
+          const page = parseInt(url.searchParams.get('page') || '1');
+          const limit = parseInt(url.searchParams.get('limit') || '8');
 
           // Step 3: Validate pagination parameters using Zod schema
           const pagination = paginationSchema.parse({ page, limit });
