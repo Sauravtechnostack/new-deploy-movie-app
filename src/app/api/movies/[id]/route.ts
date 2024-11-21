@@ -1,7 +1,7 @@
 import { handleError } from "@/lib/errorHandler";
 import { authGuard } from "@/lib/guards/auth.guard";
 import { updateMovieSchema } from "@/lib/validations/movie/movie.validation";
-import { getMovieFromId, updateMovieFromId } from "@/services/movie.service";
+import { getMovieFromId, softDeleteMovie, updateMovieFromId } from "@/services/movie.service";
 import { NextRequest, NextResponse } from "next/server";
 
 // PUT handler to update a movie based on movie ID
@@ -76,6 +76,34 @@ export async function GET(
     }
 
     // Step 5: Respond with the updated movie
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Movie updated successfully.",
+        data: movie,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    // Authenticate the user
+    const user = await authGuard();
+
+    // Get the movie ID from URL params
+    const movieId = (await params).id;
+
+    // Delete the movie
+    const movie = await softDeleteMovie(movieId)
+
+    // Respond with the updated movie
     return NextResponse.json(
       {
         success: true,

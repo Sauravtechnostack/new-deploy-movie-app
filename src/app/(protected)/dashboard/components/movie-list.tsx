@@ -37,6 +37,39 @@ function MoviesList() {
     router.push("/movie/add"); // Redirect user to the "movie/add" page
   };
 
+  const handleDeleteCard = async (movieId: string) => {
+    try {
+      // Send delete request to the API
+      const deleteResponse = await fetch(
+        `http://localhost:3000/api/movies/${movieId}`,
+        {
+          method: "DELETE",
+        }
+      );
+  
+      if (!deleteResponse.ok) {
+        throw new Error("Failed to delete the movie");
+      }
+  
+      // Refetch the updated list of movies after deletion
+      const listResponse = await fetch(
+        `/api/movies/list?page=${currentPage}&limit=${pageSize}`
+      );
+      const data = await listResponse.json();
+  
+      // Update the state with the new movies list
+      setMovies(data.movies);
+  
+      // Calculate and update total pages
+      const totalPages = Math.ceil(data.pagination.totalMovies / pageSize);
+      setTotalPages(totalPages);
+  
+      console.log("Movie deleted successfully");
+    } catch (error: unknown) {
+      console.error("Error while deleting the movie:", (error as Error).message);
+    }
+  };
+
   const handleLogout = async () => {
     await callApi({
       url: '/api/auth/logout',
@@ -56,6 +89,7 @@ function MoviesList() {
       })
     }
   }, [data, error, router])
+
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -79,8 +113,10 @@ function MoviesList() {
   }, [currentPage, pageSize]);
 
   if(movies.length === 0 && !loading){
+    console.log("Inside")
     return <DashboardEmptyState />
   }
+
 
 
   return (
@@ -121,6 +157,7 @@ function MoviesList() {
                 <Link href={`/movie/${_id}`} key={_id}>
 
                   <Card
+                    handleDeleteCard={handleDeleteCard}
                     key={_id}
                     id={_id}
                     posterUrl={posterImage}

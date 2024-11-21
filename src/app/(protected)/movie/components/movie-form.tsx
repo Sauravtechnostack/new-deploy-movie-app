@@ -18,7 +18,7 @@ function MovieForm({ movie }: { movie?: IMovie }) {
     control,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<FormData>({
     defaultValues: {
       title: movie?.title || "",
@@ -31,9 +31,10 @@ function MovieForm({ movie }: { movie?: IMovie }) {
 
   const onSubmit = async (data: FormData) => {
     // Request presigned URL
+    
     let url = data.image as string;
     if(data.image instanceof File) {
-      url = (Date.now() + data.image?.name);
+      url = (Date.now() + "-" + data.image?.name);
       const presignedUrlRawData = await fetch("/api/s3/presigned-url", {
         method: "POST",
         body: JSON.stringify({
@@ -57,7 +58,7 @@ function MovieForm({ movie }: { movie?: IMovie }) {
 
     }
 
-  
+    console.log("url", url);
     // Add movie information
 
     if (movie) {
@@ -77,7 +78,7 @@ function MovieForm({ movie }: { movie?: IMovie }) {
       const movieResponse = await fetch("/api/movies/add", {
         method: "POST",
         body: JSON.stringify({
-          posterImage: typeof data.image === 'string' ? data.image : data.image?.name,
+          posterImage: url,
           releaseYear: parseInt(data.year, 10),
           title: data.title,
         }),
@@ -114,7 +115,10 @@ function MovieForm({ movie }: { movie?: IMovie }) {
             control={control}
             render={({ field }) => (
               <ImageUpload
-                onChange={(file) => setValue("image", file,{shouldValidate:true})}
+                onChange={(file) => {
+                  console.log("file", file);
+                  setValue("image", file,{shouldValidate:true})
+                }}
                 value={typeof field.value === 'string' ? null : field.value}
                 image={movie?.posterImage}
               />
@@ -180,7 +184,7 @@ function MovieForm({ movie }: { movie?: IMovie }) {
             >
               Cancel
             </Button>
-            <Button variant="default" size="sm" className="w-1/2" type="submit">
+            <Button loading={isSubmitting} disabled={isSubmitting} variant="default" size="sm" className="w-1/2" type="submit">
               Submit
             </Button>
           </div>

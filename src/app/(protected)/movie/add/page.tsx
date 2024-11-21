@@ -1,10 +1,10 @@
 
 import React from "react";
-import AddMovie from "@/app/(protected)/movie/components/add-movie";
+import MovieForm from "../components/movie-form";
 
 function AddNewMoviePage() {
 
-  return <AddMovie />;
+  return <MovieForm />;
 }
 
 export default AddNewMoviePage;

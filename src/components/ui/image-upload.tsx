@@ -10,8 +10,6 @@ interface ImageUploadProps {
 
 function ImageUpload({ onChange, value, image }: ImageUploadProps) {
   const [dragActive, setDragActive] = useState(false);
-  
-  
 
   const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -45,8 +43,8 @@ function ImageUpload({ onChange, value, image }: ImageUploadProps) {
           src={URL.createObjectURL(value)}
           alt="Uploaded"
           className="w-full h-full object-cover"
-          width={300}
-          height={300}
+          width={500}
+          height={500}
         />
       );
     }
@@ -57,8 +55,8 @@ function ImageUpload({ onChange, value, image }: ImageUploadProps) {
           src={'https://next-project-image-upload-testing.s3.us-east-1.amazonaws.com/' +image}
           alt="Existing"
           className="w-full h-full object-cover"
-          width={300}
-          height={300}
+          width={500}
+          height={500}
         />
       );
     }
