@@ -15,9 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${montserrat.variable} font-sans overflow-y-auto overflow-x-hidden w-screen min-h-screen bg-bottom-pattern bg-no-repeat	bg-bottom bg-contain	`}
-      >
+      <body className={`${montserrat.variable}`}>
         <Toaster /> 
         {children}
       </body>

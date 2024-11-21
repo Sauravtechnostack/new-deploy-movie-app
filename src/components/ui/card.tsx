@@ -1,5 +1,4 @@
-import { useRouter } from "next/navigation";
-import React from "react";
+import Image from "next/image";
 
 interface CardProps {
   id: string,
@@ -8,15 +7,16 @@ interface CardProps {
   releaseYear: number;
 }
 
-function Card({id, posterUrl, title, releaseYear }: CardProps) {
-  const router = useRouter()
-  const handleCardClick = () => {
-    router.push(`movie/${id}`)
-  }
+function Card({ posterUrl, title, releaseYear }: CardProps) {
+
+  
 
   return (
-    <div className="px-8 pt-8 pb-16 flex flex-col outline-none bg-card rounded-lg hover:cursor-pointer hover:bg-card-hover w-full" onClick={()=>handleCardClick()}>
-      <img
+
+    <div className="px-8 pt-8 pb-16 flex flex-col outline-none bg-card rounded-lg hover:cursor-pointer hover:bg-card-hover w-full">
+      <Image
+        width={500}
+        height={500}
         src={`https://next-project-image-upload-testing.s3.us-east-1.amazonaws.com/${posterUrl}`}
         className="w-full h-full min-h-[400px] object-cover rounded-lg"
         alt={title}

@@ -32,6 +32,11 @@ export async function PUT(
       );
     }
 
+    if(movie.posterImage !== fieldsToUpdate.posterImage) {
+        // Delete the old image
+        console.log("Deleting old image", movie.posterImage);
+    }
+
     // Step 4: Update the movie based on the request body
     const updatedMovie = await updateMovieFromId(movieId, fieldsToUpdate);
 

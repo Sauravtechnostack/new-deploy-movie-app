@@ -9,7 +9,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getUserFromToken();
+  const { user } = await getUserFromToken();
 
   if (!user) {
     return redirect("/login");
@@ -22,8 +22,10 @@ export default async function RootLayout({
         id: user?._id.toString() || "",
       }}
     >
+      <div className={`bg-background text-foreground font-sans overflow-y-auto overflow-x-hidden w-screen min-h-screen bg-bottom-pattern bg-no-repeat	bg-bottom bg-contain	`}>
       <Toaster />
       {children}
+      </div>
     </UserProvider>
   );
 }

@@ -2,17 +2,18 @@
 import { Button } from "@/components/ui/button";
 import ImageUpload from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import { toast } from "@/hooks/useToast";
+import { IMovie } from "@/models/movie";
 import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
 
 type FormData = {
   title: string;
   year: string;
-  image: File | null;
+  image: File | string | null;
 };
 
-function AddMovie() {
+function MovieForm({ movie }: { movie?: IMovie }) {
   const {
     control,
     handleSubmit,
@@ -20,9 +21,9 @@ function AddMovie() {
     formState: { errors },
   } = useForm<FormData>({
     defaultValues: {
-      title: "",
-      year: "",
-      image: null,
+      title: movie?.title || "",
+      year: movie?.releaseYear.toString() || "",
+      image: movie?.posterImage || null,
     },
   });
 
@@ -30,47 +31,66 @@ function AddMovie() {
 
   const onSubmit = async (data: FormData) => {
     // Request presigned URL
-    const presignedUrlRawData = await fetch("/api/s3/presigned-url", {
-      method: "POST",
-      body: JSON.stringify({
-        objectKey: data.image?.name,
-        operation: "PUT",
-        expiresIn: 3600,
-      }),
-    });
-    const { data: presignedUrl } = await presignedUrlRawData.json();
-  
-    // Upload the image to S3
-    const uploadedImage = await fetch(presignedUrl, {
-      method: "PUT",
-      headers: {
-        "Content-Type": data.image.type, 
-      },
-      body: data.image,
-    });
-  
-    if (!uploadedImage.ok) {
-      console.error("Image upload failed", uploadedImage);
-      return;
+    let url = data.image as string;
+    if(data.image instanceof File) {
+      url = (Date.now() + data.image?.name);
+      const presignedUrlRawData = await fetch("/api/s3/presigned-url", {
+        method: "POST",
+        body: JSON.stringify({
+          objectKey: url,
+          operation: "PUT",
+          expiresIn: 3600,
+        }),
+      });
+      const { data: presignedUrl } = await presignedUrlRawData.json();
+      const uploadedImage = await fetch(presignedUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": data.image?.type || "", 
+        },
+        body: data.image,
+      });
+      if (!uploadedImage.ok) {
+        console.error("Image upload failed", uploadedImage);
+        return;
+      }
+
     }
-  
-    console.log("Uploaded image: ", uploadedImage);
+
   
     // Add movie information
-    const movieResponse = await fetch("/api/movies/add", {
-      method: "POST",
-      body: JSON.stringify({
-        posterImage: data.image?.name,
-        releaseYear: parseInt(data.year, 10),
-        title: data.title,
-      }),
-    });
-  
-    if (movieResponse.ok) {
+
+    if (movie) {
+      await fetch(`/api/movies/${movie._id}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          posterImage: url,
+          releaseYear: parseInt(data.year, 10),
+          title: data.title,
+        }),
+      });
+      toast({
+        title: "Movie updated successfully",
+      });
       router.push("/movie/list");
     } else {
-      console.error("Failed to add movie");
+      const movieResponse = await fetch("/api/movies/add", {
+        method: "POST",
+        body: JSON.stringify({
+          posterImage: typeof data.image === 'string' ? data.image : data.image?.name,
+          releaseYear: parseInt(data.year, 10),
+          title: data.title,
+        }),
+      });
+    
+      if (movieResponse.ok) {
+        router.push("/movie/list");
+      } else {
+        console.error("Failed to add movie");
+      }
     }
+
+    
   };
   
 
@@ -95,7 +115,8 @@ function AddMovie() {
             render={({ field }) => (
               <ImageUpload
                 onChange={(file) => setValue("image", file,{shouldValidate:true})}
-                value={field.value}
+                value={typeof field.value === 'string' ? null : field.value}
+                image={movie?.posterImage}
               />
             )}
           />
@@ -169,4 +190,4 @@ function AddMovie() {
   );
 }
 
-export default AddMovie;
+export default MovieForm;

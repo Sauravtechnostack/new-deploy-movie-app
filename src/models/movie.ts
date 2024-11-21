@@ -1,7 +1,7 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 import User from './user'
 
-export interface IMovie extends Document {
+export interface IMovie extends Document<mongoose.Types.ObjectId> {
   posterImage: string;
   title: string;
   releaseYear: number;

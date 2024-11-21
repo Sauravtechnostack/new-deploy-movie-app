@@ -1,7 +1,7 @@
 import { JWT_TYPE_ENUM } from '@/lib/constants/enums/common.enum';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload as JwtPayloadType } from 'jsonwebtoken';
 
-interface JwtPayload {
+type JwtPayload = JwtPayloadType & {
   userId: string;
 }
 
@@ -25,7 +25,7 @@ export const generateToken = (payload: JwtPayload, type: JWT_TYPE_ENUM): string 
     const secret = type === JWT_TYPE_ENUM.ACCESS ? JWT_ACCESS_SECRET : JWT_REFRESH_SECRET;
   
     return jwt.sign(payload, secret, { expiresIn: expiry })
-  } catch (error) {
+  } catch (_error) {
     throw new Error("Error generating JWT token.")
   }
   };
@@ -40,7 +40,7 @@ export const verifyToken = (token: string, type: JWT_TYPE_ENUM): JwtPayload => {
     try {
       const secret = type === JWT_TYPE_ENUM.ACCESS ? JWT_ACCESS_SECRET : JWT_REFRESH_SECRET;
       return jwt.verify(token, secret) as JwtPayload;
-    } catch (error) {
+    } catch (_error: unknown) {
       throw new Error('Invalid or expired token');
     }
   };
@@ -53,8 +53,8 @@ export const verifyToken = (token: string, type: JWT_TYPE_ENUM): JwtPayload => {
 export const decodeToken = (token: string): JwtPayload | null => {
   try {
     return jwt.decode(token) as JwtPayload | null;
-  } catch (error) {
-    console.error('JWT decoding failed:', error);
+  } catch (_error: unknown) {
+    console.error('JWT decoding failed:', _error);
     return null;
   }
 };

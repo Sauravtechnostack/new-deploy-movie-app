@@ -14,6 +14,7 @@ import Image from "next/image";
 import { useApi } from "@/hooks/useApi";
 import { toast } from "@/hooks/useToast";
 import DashboardEmptyState from "./empty-state";
+import Link from "next/link";
 
 function MoviesList() {
   const [movies, setMovies] = useState<
@@ -117,13 +118,16 @@ function MoviesList() {
             ) : (
               movies.length > 0 &&
               movies.map(({_id ,posterImage, title, releaseYear }) => (
-                <Card
-                  key={_id}
-                  id={_id}
-                  posterUrl={posterImage}
-                  title={title}
-                  releaseYear={releaseYear}
-                />
+                <Link href={`/movie/${_id}`} key={_id}>
+
+                  <Card
+                    key={_id}
+                    id={_id}
+                    posterUrl={posterImage}
+                    title={title}
+                    releaseYear={releaseYear}
+                  />
+                </Link>
               ))
             )}
           </div>

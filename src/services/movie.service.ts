@@ -1,7 +1,7 @@
-import { handleError } from '@/lib/errorHandler';
-import Movie, { IMovie } from '../models/movie';
-import { Types } from 'mongoose';
 import CustomError from '@/lib/customError';
+import { handleError } from '@/lib/errorHandler';
+import { Types } from 'mongoose';
+import Movie from '../models/movie';
 
 /**
  * Create a new movie document.
@@ -30,16 +30,11 @@ export const createNewMovie = async (movieData: {
  * @returns Movie document or an error if not found or unauthorized.
  */
 export const getMovieFromId = async (movieId: string, userId: Types.ObjectId) => {
-  try {
     const movie = await Movie.findOne({
       _id: movieId,
       userId
     });
-
     return movie;
-  } catch (error) {
-    return handleError(error);
-  }
 };
 
 /**

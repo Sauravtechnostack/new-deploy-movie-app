@@ -1,13 +1,14 @@
 "use client";
-import React, { useState, useEffect } from "react";
 import Image from 'next/image';
+import React, { useState } from "react";
 
 interface ImageUploadProps {
   onChange: (file: File | null) => void;
   value: File | null;
+  image?: string;
 }
 
-function ImageUpload({ onChange, value }: ImageUploadProps) {
+function ImageUpload({ onChange, value, image }: ImageUploadProps) {
   const [dragActive, setDragActive] = useState(false);
   
   
@@ -37,6 +38,54 @@ function ImageUpload({ onChange, value }: ImageUploadProps) {
     }
   };
 
+  const renderContent = () => {
+    if (value) {
+      return (
+        <Image
+          src={URL.createObjectURL(value)}
+          alt="Uploaded"
+          className="w-full h-full object-cover"
+          width={300}
+          height={300}
+        />
+      );
+    }
+
+    if (image) {
+      return (
+        <Image
+          src={'https://next-project-image-upload-testing.s3.us-east-1.amazonaws.com/' +image}
+          alt="Existing"
+          className="w-full h-full object-cover"
+          width={300}
+          height={300}
+        />
+      );
+    }
+
+    return (
+      <>
+        <div className="mb-8 w-24 h-24">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="2.5"
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
+            />
+          </svg>
+        </div>
+        <div className="font-normal text-sm">Drop an image here</div>
+      </>
+    );
+  };
+
   return (
     <div
       className={`w-full h-[400px] lg:w-[473px] lg:h-[504px] bg-input border border-dashed rounded-lg hover:cursor-pointer overflow-hidden ${
@@ -58,35 +107,7 @@ function ImageUpload({ onChange, value }: ImageUploadProps) {
         htmlFor="image-upload"
         className="w-full h-full flex flex-col justify-center items-center text-primary-foreground"
       >
-        {value ? (
-          <Image
-            src={URL.createObjectURL(value)}
-            alt="Uploaded"
-            className="w-full h-full object-cover"
-            width={300}
-            height={300}
-          />
-        ) : (
-          <>
-            <div className="mb-8 w-24 h-24">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="2.5"
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
-                />
-              </svg>
-            </div>
-            <div className="font-normal text-sm">Drop an image here</div>
-          </>
-        )}
+        {renderContent()}
       </label>
     </div>
   );
