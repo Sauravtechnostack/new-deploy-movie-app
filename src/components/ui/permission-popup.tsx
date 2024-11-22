@@ -20,7 +20,7 @@ const PermissionPopup: React.FC<PermissionPopupProps> = ({
   handleConfirmDelete,
 }) => {
   return (
-    <div className="absolute w-1/2 top-1/2 bg-input text-primary-foreground rounded-xl">
+    // <div className="absolute w-1/2 top-1/2 bg-input text-primary-foreground rounded-xl">
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="p-6 rounded-md shadow-lg">
           {/* <DialogTitle>Ready to say goodbye?</DialogTitle> */}
@@ -42,7 +42,7 @@ const PermissionPopup: React.FC<PermissionPopupProps> = ({
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    // </div>
   );
 };
 

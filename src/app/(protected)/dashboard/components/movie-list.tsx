@@ -91,7 +91,7 @@ function MoviesList({
             data.movies.map(({ _id, posterImage, title, releaseYear }) => (
               <Link href={`/movie/${_id}`} key={_id}>
                 <Card
-                  handleDeleteCard={openDeleteDialog} // Open delete dialog on click
+                  handleDeleteCard={handleDeleteCard} // Open delete dialog on click
                   key={_id}
                   id={_id}
                   posterUrl={posterImage}
@@ -108,6 +108,7 @@ function MoviesList({
           totalPages={totalPages}
           handlePageChange={handlePageChange}
         />
+        
 
         {/* Permission Popup */}
         <PermissionPopup

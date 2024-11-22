@@ -187,10 +187,10 @@ function MovieForm({ movie }: { movie?: IMovie }) {
                 required: "Year is required",
                 validate: (value) => {
                   const year = Number(value);
-                  const maxYear = new Date().getFullYear() + 20; // Maximum year
+                  const currentYear = new Date().getFullYear(); // Get the current year
                   if (isNaN(year)) return "Year must be a number";
                   if (year <= 1700) return "Year must be greater than 1700";
-                  if (year > maxYear) return `Year must not exceed ${maxYear}`;
+                  if (year > currentYear) return `Year cannot exceed the current year (${currentYear})`;
                   return true; // Valid
                 },
               }}
