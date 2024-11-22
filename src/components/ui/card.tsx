@@ -88,7 +88,7 @@ function Card({
                   handleDeleteCard(id);
                 }}
               >
-                Abracadabra
+                Delete
               </Button>
             </DialogFooter>
           </DialogContent>
