@@ -37,7 +37,11 @@ export function LoginForm() {
   useEffect(() => {
     if (data) {
       // Set success toast notification
-      toast({ title: "Successfully logged in!" });
+      toast({
+        title: "Welcome back, you've hit 'Play'!",
+        description: "It's like *The Matrix* – you're back in action!",
+        variant: "default",
+      });
       // Redirect after the login is successful
       router.replace('/dashboard'); 
     } else if (error) {

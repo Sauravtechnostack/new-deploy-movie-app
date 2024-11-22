@@ -40,7 +40,9 @@ function MoviesList({
       handleDeleteCard(movieToDelete); // Call your delete handler
       setIsDialogOpen(false); // Close the dialog
       toast({
-        title: "Deleted movie",
+        title: "Poof! It's Gone!",
+        description: "You’ve just wiped this movie from your collection. Abracadabra!",
+        variant: "default",
       });
     }
   };

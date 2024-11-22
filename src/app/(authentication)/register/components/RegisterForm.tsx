@@ -38,8 +38,8 @@ const RegisterForm = () => {
     });
     if (response.ok) {
       toast({
-        title: "Account created successfully",
-        description: "Please login to continue",
+        title: "Your blockbuster account is ready!",
+        description: "Roll the credits and log in to start your journey.",
         variant: "default",
       });
       router.push("/dashboard");

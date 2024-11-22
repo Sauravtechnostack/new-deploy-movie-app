@@ -74,7 +74,9 @@ function MovieForm({ movie }: { movie?: IMovie }) {
 
       if (updateMovie.ok) {
         toast({
-          title: "Reel update! Movie details refreshed!",
+          title: "The Force is Strong! Movie details updated!",
+          description: "Like a Jedi mastering their craft, your movie details have been refreshed.",
+          variant: "default",
         });
         router.push("/dashboard");
       } else if (updateMovie.status < 500) {
@@ -105,6 +107,8 @@ function MovieForm({ movie }: { movie?: IMovie }) {
       if (movieResponse.ok) {
         toast({
           title: "Lights, Camera, Action! Movie added!",
+          description: "Like 'The Godfather,' this one's now a part of the family.",
+          variant: "default",
         });
         router.replace("/dashboard");
         router.refresh();
