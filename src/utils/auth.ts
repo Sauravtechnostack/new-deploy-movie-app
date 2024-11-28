@@ -10,7 +10,6 @@ export async function getUserFromToken() {
     await connectDB();
     const cookie = await cookies();
     const token = cookie.get("accessToken");
-    const rememberMe = cookie.get("rememberMe");
 
     if (!token) {
       throw new Error("No token found");

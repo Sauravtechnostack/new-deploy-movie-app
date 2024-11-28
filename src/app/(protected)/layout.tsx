@@ -3,9 +3,6 @@ import { UserProvider } from "@/store/user-store";
 import { getUserFromToken } from "@/utils/auth";
 import { redirect } from "next/navigation";
 import "../globals.css";
-export const dynamic = 'force-dynamic'
-
-
 
 export default async function RootLayout({
   children,

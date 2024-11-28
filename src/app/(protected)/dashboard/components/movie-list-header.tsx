@@ -1,3 +1,4 @@
+"use client";
 import { toast } from "@/hooks/useToast";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -11,7 +12,6 @@ function MovieListHeader() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // Add any necessary headers here (e.g., Authorization)
       },
     });
 
@@ -30,6 +30,7 @@ function MovieListHeader() {
       });
     }
   };
+
   return (
     <div className="text-primary-foreground flex items-center justify-between">
       <div className="flex items-center">

@@ -30,6 +30,7 @@ function MovieForm({ movie }: { movie?: IMovie }) {
   });
 
   const router = useRouter();
+  
   const {
     callApi: callUpdateMovieApi,
     data: updatedMovie,

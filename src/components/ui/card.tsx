@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation";
+"use client";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,16 +10,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { useState } from "react";
 
 interface CardProps {
   id: string;
   posterUrl: string;
   title: string;
   releaseYear: number;
-  handleDeleteCard: (cardId: string) => void;
+  isDeleteMovieLoading: boolean;
+  handleDeleteCard: (movieId: string) => Promise<void>;
 }
 
 function Card({
@@ -27,8 +27,12 @@ function Card({
   posterUrl,
   title,
   releaseYear,
-  handleDeleteCard,
-}: CardProps) {
+  isDeleteMovieLoading,
+  handleDeleteCard
+}:CardProps) {
+
+  const [show, setShow] = useState(false);
+
   return (
     <div className="relative">
       <div
@@ -38,7 +42,9 @@ function Card({
           e.preventDefault();
         }}
       >
-        <Dialog>
+        <Dialog open={show} onOpenChange={(o)=>{
+          setShow(o);
+        }}>
           <DialogTrigger asChild>
             <Button
               variant="default"
@@ -82,10 +88,12 @@ function Card({
                 className="bg-error"
                 size="xs"
                 type="submit"
-                onClick={(e) => {
+                loading={isDeleteMovieLoading}
+                onClick={async (e) => {
                   e.stopPropagation();
                   e.preventDefault();
-                  handleDeleteCard(id);
+                   await handleDeleteCard(id);
+                  setShow(false);
                 }}
               >
                 Delete

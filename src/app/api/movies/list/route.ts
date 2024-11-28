@@ -109,6 +109,13 @@ import { NextRequest, NextResponse } from "next/server";
  *                   description: Error message describing the internal issue.
  */
 
+const waitAMin = async (): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve()
+    }, 2000)
+  })
+}
 export async function GET(request: NextRequest) {
   try {
     // Authenticate the user
@@ -125,6 +132,8 @@ export async function GET(request: NextRequest) {
     // Calculate the skip value for pagination
     const skip = (page - 1) * limit;
 
+    await waitAMin();
+
     // Fetch paginated movies from the database
     const result = await getAllMovies(user._id, {
       page,
@@ -133,7 +142,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Return the response with movies and pagination info
-    return NextResponse.json(result);
+    return NextResponse.json(result)
   } catch (error) {
     return handleError(error);
   }
